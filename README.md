@@ -1,7 +1,7 @@
 # TrueAuth
-Authentication plugin for Spigot and Paper that I have been developing for my offline-mode Minecraft Server
+TrueAuth is an authentication plugin for Spigot and Paper that I have been developing for my offline-mode Minecraft Server<br/>
+This plugin is a bit different from those authentication plugins that I know.
 
-This plugin is a bit different from those authentication plugins that I know.  
 ## How it works
 1. When player joins the server, his playerdata is being saved and copied to plugin's folder.
 2. Player appears at spawn or at specified location by default and there is no option for player to appear at his last location, unless his session is active.
@@ -10,10 +10,11 @@ This plugin is a bit different from those authentication plugins that I know.
 5. As soon as you ender your password, you are being kicked from the server, your original playerdata is being restored and your session becomes active.
 6. Then you can rejoin and play.
 
-By restoring player's original playerdata
+By restoring original playerdata, instead of just teleporting, it is possible to preserve all player states, such as being in a boat, riding a horse, or flying with elytra.
 
 ## Session
-Session is a period of time when you can join the server without having to authorize. Session time can be configured by editing config.yml<br/>
+Session is a period of time when you can join the server without having to authorize. Session time can be configured by editing config.yml
+
 Session becomes active when you:<br/>
 1. Are being kicked after successful authentication.<br/>
 2. Leave the server<br/>
