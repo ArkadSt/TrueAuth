@@ -158,10 +158,6 @@ public class EventListener implements Listener {
 
         player.teleport(main.getLobbyLocation());
         
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Use \"/register &opassword password&r&3\" to register if you haven't yet."));
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Use \"/login &opassword&r&3\" to login."));
-        player.sendMessage("");
-        player.sendMessage(ChatColor.DARK_AQUA + "You can use /reg and /l as well.");
     }
 
     @EventHandler

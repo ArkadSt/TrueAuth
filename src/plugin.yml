@@ -1,7 +1,7 @@
 name: TrueAuth
 author: ArkadSt
 version: 1.0
-main: org.spigotmc.Main
+main: org.trueauth.Main
 api-version: 1.16
 
 commands:
