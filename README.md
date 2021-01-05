@@ -21,11 +21,11 @@ Session becomes active when you:
 
 ## Commands
 ### General commands:
-`/register _password password_`<br/>
-`/login _password_`<br/>
-`/changepassword _new_password new_password_`
+`/register password password`<br/>
+`/login password`<br/>
+`/changepassword new_password new_password`
 
-You can also use /reg, /l and /changepass.
+You can also use `/reg`, `/l` and `/changepass`.
 
 ### Admin commands:
 `/trueauth reload` - reloads config<br/>
