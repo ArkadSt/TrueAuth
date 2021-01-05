@@ -1,5 +1,5 @@
 # TrueAuth
-Authorization plugin for Spigot and Paper that I have been developing for my offline-mode Minecraft Server
+Authentication plugin for Spigot and Paper that I have been developing for my offline-mode Minecraft Server
 
 This plugin is different from those authentication plugins that I know.  
 That's how it works:
