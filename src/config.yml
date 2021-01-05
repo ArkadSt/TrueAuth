@@ -1,5 +1,9 @@
+# If false, player appears at spawn.
 custom_location: false
+
+# If custom_location is set to true
 CustomLocationTrue:
+    # Can be "world", "world_nether", "world_the_end"
     world: "world"
     X: 0.0
     Y: 60.0
@@ -7,5 +11,7 @@ CustomLocationTrue:
     Yaw: 0.0
     Pitch: 0.0
 
+# Session time in minutes.
 session_time: 5
+# If true, player cannot move if not authorized.
 disable_moving: false

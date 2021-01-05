@@ -54,6 +54,7 @@ public class Main extends JavaPlugin {
         File stats_in = new File(getDataFolder(), "stats/" + uuid.toString() + ".json");
         File stats_out = new File(getServer().getWorldContainer(), "world/stats/" + uuid.toString() + ".json");
         
+        getServer().savePlayers();
         
         Files.copy(playerdata_in.toPath(), playerdata_out.toPath(), StandardCopyOption.REPLACE_EXISTING);
         Files.copy(advancements_in.toPath(), advancements_out.toPath(), StandardCopyOption.REPLACE_EXISTING);
