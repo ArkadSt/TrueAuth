@@ -20,4 +20,3 @@ commands:
     trueauth:
         description: TrueAuth provided command.
         permission: trueauth.admin
-   
