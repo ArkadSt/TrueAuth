@@ -15,7 +15,7 @@ By restoring original playerdata, instead of just teleporting, it is possible to
 ## Session
 Session is a period of time when you can join the server without having to authorize. Session time can be configured by editing config.yml
 
-Session becomes active when you:<br/>
+Session becomes active when you:
 1. Are being kicked after successful authentication.<br/>
 2. Leave the server<br/>
 
@@ -23,7 +23,8 @@ Session becomes active when you:<br/>
 ### General commands:
 `/register _password password_`<br/>
 `/login _password_`<br/>
-`/changepassword _new_password new_password_`<br/>
+`/changepassword _new_password new_password_`
+
 You can also use /reg, /l and /changepass.
 
 ### Admin commands:
