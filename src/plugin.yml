@@ -1,0 +1,23 @@
+name: TrueAuth
+author: ArkadSt
+version: 1.0
+main: org.spigotmc.Main
+api-version: 1.16
+
+commands:
+    register:
+        description: TrueAuth provided command.
+        usage: "/register password password"
+        aliases: reg
+    login:
+        description: TrueAuth provided command.
+        usage: "/login password"
+        aliases: l
+    changepassword:
+        description: TrueAuth provided command.
+        usage: "/changepassword new_password new_password"
+        aliases: changepass
+    trueauth:
+        description: TrueAuth provided command.
+        permission: trueauth.admin
+   

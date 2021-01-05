@@ -1,0 +1,11 @@
+custom_location: false
+CustomLocationTrue:
+    world: "world"
+    X: 0.0
+    Y: 60.0
+    Z: 0.0
+    Yaw: 0.0
+    Pitch: 0.0
+
+session_time: 5
+disable_moving: false
