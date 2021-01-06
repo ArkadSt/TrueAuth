@@ -12,7 +12,7 @@ This plugin is a bit different from those authentication plugins that I know.
 By restoring original playerdata, instead of just teleporting, it is possible to preserve all player states, such as being in a boat, riding a horse, or flying with elytra.
 
 ## Session
-Session is a period of time when you can join the server without having to authorize. Session time can be configured by editing config.yml
+Session is a period of time when you can join the server without having to be authorized. Session time can be configured by editing config.yml
 
 Session becomes active when you:
 1. Are being kicked after successful authentication.<br/>
