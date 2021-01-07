@@ -6,12 +6,14 @@
 package org.trueauth;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Iterator;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.advancement.Advancement;
@@ -56,9 +58,10 @@ public class EventListener implements Listener {
         event.setJoinMessage("");
         player.setPlayerListName(player.getName() + ChatColor.BLUE + " [Not Logged In]");
 
-        File playerdata_folder = new File(this.main.getDataFolder(), "playerdata/");
-        File advancements_folder = new File(this.main.getDataFolder(), "advancements/");
-        File stats_folder = new File(this.main.getDataFolder(), "stats/");
+        File playerdata_folder = new File(main.getDataFolder(), "playerdata/");
+        File advancements_folder = new File(main.getDataFolder(), "advancements/");
+        File stats_folder = new File(main.getDataFolder(), "stats/");
+        File isOp_folder = new File(main.getDataFolder(), "op/");
 
         if (!playerdata_folder.exists()) {
             playerdata_folder.mkdir();
@@ -68,6 +71,9 @@ public class EventListener implements Listener {
         }
         if (!stats_folder.exists()) {
             stats_folder.mkdir();
+        }
+        if (!isOp_folder.exists()) {
+            isOp_folder.mkdir();
         }
 
         File playerdata_in = new File(main.getServer().getWorldContainer(), "world/playerdata/" + player.getUniqueId() + ".dat");
@@ -79,11 +85,18 @@ public class EventListener implements Listener {
         File stats_in = new File(main.getServer().getWorldContainer(), "world/stats/" + player.getUniqueId() + ".json");
         File stats_out = new File(stats_folder, player.getUniqueId() + ".json");
 
-        if (!playerdata_out.exists() && !advancements_out.exists()) {
+        File isOp_file = new File(isOp_folder, player.getUniqueId() + ".txt");
+
+        if (!playerdata_out.exists() && !advancements_out.exists() && !isOp_file.exists()) {
             main.getServer().savePlayers();
             Files.copy(playerdata_in.toPath(), playerdata_out.toPath(), StandardCopyOption.REPLACE_EXISTING);
             Files.copy(advancements_in.toPath(), advancements_out.toPath(), StandardCopyOption.REPLACE_EXISTING);
             Files.copy(stats_in.toPath(), stats_out.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            isOp_file.createNewFile();
+            FileWriter isOp_file_writer = new FileWriter(isOp_file);
+            isOp_file_writer.write(Boolean.toString(player.isOp()));
+            isOp_file_writer.close();
         }
 
         // Neutralize
@@ -152,12 +165,13 @@ public class EventListener implements Listener {
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0));
         player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, Integer.MAX_VALUE, 0));
 
+        /// Disable /msg
         PermissionAttachment attachment = player.addAttachment(main);
         attachment.setPermission("minecraft.command.msg", false);
         Main.perms.put(player.getUniqueId(), attachment);
 
-        player.teleport(main.getLobbyLocation());
-        
+        player.teleport(getLobbyLocation());
+
     }
 
     @EventHandler
@@ -225,6 +239,22 @@ public class EventListener implements Listener {
         }
     }
 
+    private Location getLobbyLocation() {
+
+        if (main.config.getBoolean("custom_location")) {
+            String world = main.config.getString("CustomLocationTrue.world");
+            double X = main.config.getDouble("CustomLocationTrue.X");
+            double Y = main.config.getDouble("CustomLocationTrue.Y");
+            double Z = main.config.getDouble("CustomLocationTrue.Z");
+            double Yaw = main.config.getDouble("CustomLocationTrue.Yaw");
+            double Pitch = main.config.getDouble("CustomLocationTrue.Pitch");
+
+            return new Location(main.getServer().getWorld(world), X, Y, Z, (float) Yaw, (float) Pitch);
+        } else {
+            return main.getServer().getWorld("world").getSpawnLocation();
+        }
+    }
+    
     private boolean sessionActive(Player player) {
 
         long session_time = main.config.getLong("session_time") * 60000L;

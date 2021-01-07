@@ -7,6 +7,8 @@ package org.trueauth;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Scanner;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -46,9 +48,9 @@ public class LoginCommand implements CommandExecutor {
                             if (args[0].equals(password)) {
 
                                 player.kickPlayer(ChatColor.DARK_GREEN + "You have been authenticated. Now re-join the server and play.");
-                                main.restorePlayerData(player.getUniqueId());
+                                restorePlayerData(player);
                                 Main.disconnected_player_array.add(new DisconnectedPlayer(player));
-                                
+
                             } else {
                                 player.sendMessage(ChatColor.RED + "Wrong password.");
                             }
@@ -69,6 +71,34 @@ public class LoginCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "You must be a player in order to run this command");
         }
         return true;
+    }
+
+    private void restorePlayerData(Player player) throws IOException {
+
+        File playerdata_in = new File(main.getDataFolder(), "playerdata/" + player.getUniqueId().toString() + ".dat");
+        File playerdata_out = new File(main.getServer().getWorldContainer(), "world/playerdata/" + player.getUniqueId().toString() + ".dat");
+
+        File advancements_in = new File(main.getDataFolder(), "advancements/" + player.getUniqueId().toString() + ".json");
+        File advancements_out = new File(main.getServer().getWorldContainer(), "world/advancements/" + player.getUniqueId().toString() + ".json");
+
+        File stats_in = new File(main.getDataFolder(), "stats/" + player.getUniqueId().toString() + ".json");
+        File stats_out = new File(main.getServer().getWorldContainer(), "world/stats/" + player.getUniqueId().toString() + ".json");
+
+        File isOp_file = new File(main.getDataFolder(), "op/" + player.getUniqueId() + ".txt");
+
+        Files.copy(playerdata_in.toPath(), playerdata_out.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(advancements_in.toPath(), advancements_out.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(stats_in.toPath(), stats_out.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        
+        Scanner isOp_reader = new Scanner(isOp_file);
+        player.setOp(isOp_reader.nextBoolean());
+        isOp_reader.close();
+        
+        playerdata_in.delete();
+        advancements_in.delete();
+        stats_in.delete();
+        isOp_file.delete();
+
     }
 
 }
