@@ -50,7 +50,7 @@ public class RegisterCommand implements CommandExecutor {
                             player.sendMessage(ChatColor.RED + "Passwords do not match. Try again");
                         }
                     } else {
-                        player.sendMessage(ChatColor.RED + "/register password password");
+                        return false;
                     }
                 } else {
                     player.sendMessage(ChatColor.RED + "You have already registered.");

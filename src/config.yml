@@ -15,3 +15,6 @@ CustomLocationTrue:
 session_time: 5
 # If true, player cannot move if not authorized.
 disable_moving: false
+
+permissions_set_false:
+    - "minecraft.command.msg"

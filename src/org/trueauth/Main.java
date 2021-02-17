@@ -6,15 +6,9 @@
 package org.trueauth;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
-import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -24,7 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main extends JavaPlugin {
 
     public static ArrayList<DisconnectedPlayer> disconnected_player_array = new ArrayList();
-    public static HashMap<UUID,PermissionAttachment> perms = new HashMap();
+    public static ArrayList<UUID> not_logged_in_player_uuid_array = new ArrayList();
     public FileConfiguration config;
     
 
@@ -49,7 +43,7 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        perms.forEach((key, value) -> value.remove());
+
     }
 
 }

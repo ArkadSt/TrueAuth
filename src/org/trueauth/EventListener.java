@@ -10,7 +10,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.model.user.User;
+import net.luckperms.api.node.Node;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -29,7 +35,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -55,9 +60,13 @@ public class EventListener implements Listener {
             return;
         }
 
+        if (!Main.not_logged_in_player_uuid_array.contains(player.getUniqueId())) {
+            Main.not_logged_in_player_uuid_array.add(player.getUniqueId());
+        }
+
         event.setJoinMessage("");
         player.setPlayerListName(player.getName() + ChatColor.BLUE + " [Not Logged In]");
-
+        
         File playerdata_folder = new File(main.getDataFolder(), "playerdata/");
         File advancements_folder = new File(main.getDataFolder(), "advancements/");
         File stats_folder = new File(main.getDataFolder(), "stats/");
@@ -165,10 +174,26 @@ public class EventListener implements Listener {
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 0));
         player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, Integer.MAX_VALUE, 0));
 
-        /// Disable /msg
-        PermissionAttachment attachment = player.addAttachment(main);
-        attachment.setPermission("minecraft.command.msg", false);
-        Main.perms.put(player.getUniqueId(), attachment);
+        /// set perms to false
+        LuckPerms luckPerms = LuckPermsProvider.get();
+        User user = luckPerms.getPlayerAdapter(Player.class).getUser(player);
+
+        Collection<Node> user_nodes = user.getNodes();
+
+        List<String> perms = main.config.getStringList("permissions_set_false");
+        outerloop:
+        for (String perm : perms) {
+            for (Node user_node : user_nodes) {
+                if (user_node.getKey().equals(perm)) {
+                    Node user_node_modified = user_node.toBuilder().value(false).build();
+                    user.data().add(user_node_modified);
+                    continue outerloop;
+                }
+            }
+            Node node = Node.builder(perm).value(false).build();
+            user.data().add(node);
+        }
+        luckPerms.getUserManager().saveUser(user);
 
         player.teleport(getLobbyLocation());
 
@@ -178,12 +203,11 @@ public class EventListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
-        // Check if authorized
-        if (!(new File(main.getDataFolder(), "playerdata/" + player.getUniqueId().toString() + ".dat")).exists()) {
-            Main.disconnected_player_array.add(new DisconnectedPlayer(player));
-        } else {
+        // Check if not authorized
+        if (Main.not_logged_in_player_uuid_array.contains(player.getUniqueId())) {
             event.setQuitMessage("");
-            player.removeAttachment(Main.perms.get(player.getUniqueId()));
+        } else {
+            Main.disconnected_player_array.add(new DisconnectedPlayer(player));
         }
 
     }
@@ -195,7 +219,7 @@ public class EventListener implements Listener {
             Player player = (Player) damager;
 
             // Check if not authorized
-            if ((new File(main.getDataFolder(), "playerdata/" + player.getUniqueId().toString() + ".dat")).exists()) {
+            if (Main.not_logged_in_player_uuid_array.contains(player.getUniqueId())) {
                 event.setCancelled(true);
             }
 
@@ -207,7 +231,7 @@ public class EventListener implements Listener {
         Player player = event.getPlayer();
 
         // Check if not authorized
-        if ((new File(main.getDataFolder(), "playerdata/" + player.getUniqueId().toString() + ".dat")).exists()) {
+        if (Main.not_logged_in_player_uuid_array.contains(player.getUniqueId())) {
             event.setCancelled(true);
         }
     }
@@ -218,11 +242,11 @@ public class EventListener implements Listener {
             Player player = event.getPlayer();
 
             // Check if not authorized
-            if ((new File(main.getDataFolder(), "playerdata/" + player.getUniqueId().toString() + ".dat")).exists()) {
+            if (Main.not_logged_in_player_uuid_array.contains(player.getUniqueId())) {
                 player.sendMessage(ChatColor.RED + "You have to log in in order to use chat.");
                 event.setCancelled(true);
             } else {
-                event.getRecipients().removeIf(x -> (new File(main.getDataFolder(), "playerdata/" + x.getUniqueId().toString() + ".dat")).exists());
+                event.getRecipients().removeIf(x -> Main.not_logged_in_player_uuid_array.contains(x.getUniqueId()));
             }
         }
     }
@@ -233,7 +257,7 @@ public class EventListener implements Listener {
             Player player = event.getPlayer();
 
             // Check if not authorized
-            if ((new File(main.getDataFolder(), "playerdata/" + player.getUniqueId().toString() + ".dat")).exists()) {
+            if (Main.not_logged_in_player_uuid_array.contains(player.getUniqueId())) {
                 event.setCancelled(true);
             }
         }
@@ -254,7 +278,7 @@ public class EventListener implements Listener {
             return main.getServer().getWorld("world").getSpawnLocation();
         }
     }
-    
+
     private boolean sessionActive(Player player) {
 
         long session_time = main.config.getLong("session_time") * 60000L;

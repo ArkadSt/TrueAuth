@@ -1,22 +1,23 @@
 name: TrueAuth
 author: ArkadSt
-version: 1.0
+version: 1.1
 main: org.trueauth.Main
 api-version: 1.16
+depend: [LuckPerms]
 
 commands:
     register:
-        description: TrueAuth provided command.
-        usage: "/register password password"
+        description: "TrueAuth provided command."
+        usage: "§cUsage: /register password password"
         aliases: reg
     login:
-        description: TrueAuth provided command.
-        usage: "/login password"
+        description: "TrueAuth provided command."
+        usage: "§cUsage: /login password"
         aliases: l
     changepassword:
-        description: TrueAuth provided command.
-        usage: "/changepassword new_password new_password"
+        description: "TrueAuth provided command."
+        usage: "§cUsage: /changepassword new_password new_password"
         aliases: changepass
     trueauth:
-        description: TrueAuth provided command.
+        description: "TrueAuth provided command."
         permission: trueauth.admin
