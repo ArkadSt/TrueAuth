@@ -7,6 +7,7 @@ package org.trueauth;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,13 +19,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main extends JavaPlugin {
 
     public static ArrayList<DisconnectedPlayer> disconnected_player_array = new ArrayList();
-    public static ArrayList<UUID> not_logged_in_player_uuid_array = new ArrayList();
+    public static HashMap<UUID, Integer> not_logged_in_player_collection = new HashMap();
     public FileConfiguration config;
     
-
-
-
-
     @Override
     public void onEnable() {
 

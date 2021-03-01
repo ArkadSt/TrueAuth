@@ -11,10 +11,22 @@ CustomLocationTrue:
     Yaw: 0.0
     Pitch: 0.0
 
-# Session time in minutes.
-session_time: 5
+# Session time in seconds.
+session_time: 300
+
+# Timeout in seconds. Set -1 to disable:
+timeout: 60    
+
 # If true, player cannot move if not authorized.
 disable_moving: false
 
-permissions_set_false:
-    - "minecraft.command.msg"
+# Permissions to revoke for the time of authorization
+permissions:
+    # Permissions listed here will be set to false and then back to true.
+    for_everyone:
+        - "minecraft.command.msg"
+    # Permissions listed here will be set to false and then back to true
+    # only if the user has this permission set to true.
+    # Otherwise nothing will be done to the user.
+    if_true:
+        

@@ -59,10 +59,11 @@ public class LoginCommand implements CommandExecutor {
 
                                 Collection<Node> user_nodes = user.getNodes();
 
-                                List<String> perms = main.config.getStringList("permissions_set_false");
+                                List<String> perms_for_everyone = main.config.getStringList("permissions.for_everyone");
+                                List<String> perms_if_true = main.config.getStringList("permissions.if_true");
 
                                 for (Node user_node : user_nodes) {
-                                    if (perms.contains(user_node.getKey())) {
+                                    if (perms_for_everyone.contains(user_node.getKey()) || perms_if_true.contains(user_node.getKey())) {
                                         Node user_node_modified = user_node.toBuilder().value(true).build();
                                         user.data().add(user_node_modified);
                                     }
@@ -71,7 +72,6 @@ public class LoginCommand implements CommandExecutor {
                                 
                                 player.kickPlayer(ChatColor.DARK_GREEN + "You have been authenticated. Now re-join the server and play.");
                                 restorePlayerData(player);
-                                Main.not_logged_in_player_uuid_array.remove(player.getUniqueId());
                                 Main.disconnected_player_array.add(new DisconnectedPlayer(player));
 
                             } else {
